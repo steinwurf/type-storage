@@ -53,4 +53,4 @@ def build(bld):
     if bld.is_toplevel():
         bld.recurse('test')
 
-        # bld.recurse('examples/...')
+        bld.recurse('examples')

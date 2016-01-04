@@ -1,0 +1,8 @@
+# encoding: utf-8
+
+bld.program(
+    features='cxx',
+    source=['use_type_storage.cpp'],
+    target='use_type_storage',
+    use=['type_storage_includes'])
+
