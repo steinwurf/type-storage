@@ -12,24 +12,6 @@
 
 #include <gtest/gtest.h>
 
-// namespace
-// {
-//     template<typename T> struct size_wrap
-//     {
-//         T value;
-//         const size_t size = sizeof(T);
-//     };
-
-//     // Add default constructor to a "wrapper type"
-//     template<typename T>
-//     class shared_pointer : public std::shared_ptr<T>
-//     {
-//     public:
-//         shared_pointer() : std::shared_ptr<T>(std::make_shared<T>())
-//         { }
-//     };
-// }
-
 
 TEST(TestTypeStorage, initialize)
 {
@@ -78,18 +60,3 @@ TEST(TestTypeStorage, set_get_type)
         EXPECT_EQ(value, storage.get<uint64_t>());
     }
 }
-
-// /// Some wrapper types does not provide sufficient default construction,
-// /// e.g. does an std::shared_ptr<T> not provide a valid object,
-// /// and the default no-argument constructor can be overridden for convienience,
-// /// as in shared_pointer definition at the top of this file.
-// TEST(TestTypeStorage, add_default_construct)
-// {
-//     type_storage::type_storage<shared_pointer, uint8_t, uint16_t, uint32_t> storage;
-
-//     EXPECT_TRUE(bool(storage.get<uint8_t>()));
-
-//     storage.get<uint8_t>().reset();
-
-//     EXPECT_FALSE(bool(storage.get<uint8_t>()));
-// }
