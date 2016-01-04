@@ -1,0 +1,7 @@
+# encoding: utf-8
+
+bld.program(
+    features='cxx test',
+    source=['type_storage_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
+    target='type_storage_tests',
+    use=['type_storage_includes', 'gtest'])
