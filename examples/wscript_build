@@ -6,3 +6,8 @@ bld.program(
     target='use_type_storage',
     use=['type_storage_includes'])
 
+bld.program(
+    features='cxx',
+    source=['use_wrapped_type_storage.cpp'],
+    target='use_wrapped_type_storage',
+    use=['type_storage_includes'])
