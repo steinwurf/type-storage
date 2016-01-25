@@ -13,7 +13,7 @@ namespace type_storage
 {
 
     /// Container for multiple unique types
-    /// All types are packet in template class Wrapper, so it is possible to
+    /// All types are packed in template class Wrapper, so it is possible to
     /// have e.g. vectors of types MessageTypes, or even vectors of vectors
     /// of MessagesTypes.
     /// Wrapper<Type>-references can be extracted with the

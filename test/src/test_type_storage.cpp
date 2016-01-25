@@ -12,51 +12,45 @@
 
 #include <gtest/gtest.h>
 
-
-TEST(TestTypeStorage, initialize)
-{
-    type_storage::type_storage<uint8_t, uint16_t, uint32_t, uint64_t> storage;
-}
-
 TEST(TestTypeStorage, get_type)
 {
-    type_storage::type_storage<uint8_t, uint16_t, uint32_t, uint64_t> storage;
+    std::tuple<uint8_t, uint16_t, uint32_t, uint64_t> tup;
 
     // Verify that we get the right size out by using sizeof function
-    EXPECT_EQ(1U, sizeof(storage.get<uint8_t>()));
-    EXPECT_EQ(2U, sizeof(storage.get<uint16_t>()));
-    EXPECT_EQ(4U, sizeof(storage.get<uint32_t>()));
-    EXPECT_EQ(8U, sizeof(storage.get<uint64_t>()));
+    EXPECT_EQ(1U, sizeof(type_storage::get<uint8_t>(tup)));
+    EXPECT_EQ(2U, sizeof(type_storage::get<uint16_t>(tup)));
+    EXPECT_EQ(4U, sizeof(type_storage::get<uint32_t>(tup)));
+    EXPECT_EQ(8U, sizeof(type_storage::get<uint64_t>(tup)));
 }
 
 TEST(TestTypeStorage, set_get_type)
 {
-    type_storage::type_storage<uint8_t, uint16_t, uint32_t, uint64_t> storage;
+    std::tuple<uint8_t, uint16_t, uint32_t, uint64_t> tup;
 
     // Verify that we assign the correct value to the correct type by using
     // numeric limits of each type
 
     {
         uint64_t value = std::numeric_limits<uint8_t>::max();
-        storage.get<uint8_t>() = value;
-        EXPECT_EQ(value, storage.get<uint8_t>());
+        type_storage::get<uint8_t>(tup) = value;
+        EXPECT_EQ(value, type_storage::get<uint8_t>(tup));
     }
 
     {
         uint64_t value = std::numeric_limits<uint16_t>::max();
-        storage.get<uint16_t>() = value;
-        EXPECT_EQ(value, storage.get<uint16_t>());
+        type_storage::get<uint16_t>(tup) = value;
+        EXPECT_EQ(value, type_storage::get<uint16_t>(tup));
     }
 
     {
         uint64_t value = std::numeric_limits<uint32_t>::max();
-        storage.get<uint32_t>() = value;
-        EXPECT_EQ(value, storage.get<uint32_t>());
+        type_storage::get<uint32_t>(tup) = value;
+        EXPECT_EQ(value, type_storage::get<uint32_t>(tup));
     }
 
     {
         uint64_t value = std::numeric_limits<uint64_t>::max();
-        storage.get<uint64_t>() = value;
-        EXPECT_EQ(value, storage.get<uint64_t>());
+        type_storage::get<uint64_t>(tup) = value;
+        EXPECT_EQ(value, type_storage::get<uint64_t>(tup));
     }
 }

@@ -12,14 +12,14 @@
 #include <type-storage/type_storage.hpp>
 
 // Container to keep track of sums of type int32_t, uint32_t and float types
-type_storage::type_storage<int32_t, uint32_t, float> sums;
+std::tuple<int32_t, uint32_t, float> sums;
 
 // Function that adds to the sum of type 'T' in container 'sums'.
 // Does not compile if T is not in types stored in 'sums'.
 template<typename T>
 void add(T t)
 {
-    sums.get<T>()+=t;
+    type_storage::get<T>(sums)+=t;
 }
 
 int main()
@@ -41,8 +41,8 @@ int main()
     // The sums can now be tracked using a type, and thus only using one
     // variable (sums) to keep track of an arbitrary amount of sums.
     std::cout << "sums are: \n"
-              << "int32_t:  \t" << sums.get<int32_t>() << "\n"
-              << "uint32_t:  \t" << sums.get<uint32_t>() << "\n"
-              << "float:  \t" << sums.get<float>()
+              << "int32_t:  \t" << type_storage::get<int32_t>(sums) << "\n"
+              << "uint32_t:  \t" << type_storage::get<uint32_t>(sums) << "\n"
+              << "float:  \t" << type_storage::get<float>(sums)
               << std::endl;
 }
