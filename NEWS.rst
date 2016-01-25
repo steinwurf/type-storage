@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+2.0.0
+-----
+* Change type_storage to raw tuple and made type_storage get() function a free function within the type_storage namespace
+
 1.0.0
 -----
 * Initial release of the type-storage library.
