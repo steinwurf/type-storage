@@ -27,7 +27,7 @@ int main()
     // Create variables of different types to add with function 'add'
     int32_t a = -5;
     uint32_t b = 10U;
-    float c = 3.14;
+    float c = 3.14f;
 
     // Add the values a couple of times.
 
