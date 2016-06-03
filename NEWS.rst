@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+2.0.2
+-----
+* Added const get function
+
 2.0.1
 -----
 * Added const getter function for wrapped type storage
