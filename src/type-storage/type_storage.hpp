@@ -66,30 +66,11 @@ namespace type_storage
         return std::get<detail::find_index<T, Types...>::value>(tup);
     }
 
-    // /// Container for multiple unique types
-    // /// References to contained objects can be extracted with the
-    // /// get<Type>() member function.
-    // template<typename... MessageTypes>
-    // class type_storage
-    // {
-    // public:
-
-    //     /// Finds the object with type T in private member m_tuple.
-    //     /// Does not compile if T is not in m_tuple.
-    //     /// This function essentially implements C++14 get<type>(tuple) function
-    //     /// using C++11 code.
-    //     /// @return a reference to the requested variable, Wrapper<T>&
-    //     template<typename T>
-    //     T& get()
-    //     {
-    //         return std::get <
-    //                detail::find_index<T, MessageTypes...>::value > (m_tuple);
-    //     }
-
-    // private:
-
-    //     /// the native container
-    //     std::tuple<MessageTypes...> m_tuple;
-    // };
+    // Const version of above
+    template<typename T, typename... Types>
+    const T& get(const std::tuple<Types...>& tup)
+    {
+        return std::get<detail::find_index<T, Types...>::value>(tup);
+    }
 }
 
