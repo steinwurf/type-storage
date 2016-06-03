@@ -4,7 +4,7 @@
 import waflib.extras.wurf_options
 
 APPNAME = 'type-storage'
-VERSION = '2.0.0'
+VERSION = '2.0.1'
 
 
 def options(opt):

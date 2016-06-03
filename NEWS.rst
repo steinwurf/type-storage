@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+2.0.1
+-----
+* Added const getter function for wrapped type storage
+
 2.0.0
 -----
 * Change type_storage to raw tuple and made type_storage get() function a free function within the type_storage namespace
