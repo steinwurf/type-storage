@@ -33,6 +33,15 @@ namespace type_storage
                    detail::find_index<T, MessageTypes...>::value > (m_tuple);
         }
 
+        // const version
+        template<typename T>
+        const Wrapper<T>& get() const
+        {
+            return std::get <
+                   detail::find_index<T, MessageTypes...>::value > (m_tuple);
+        }
+
+
     private:
 
         /// the native container
