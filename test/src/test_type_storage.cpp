@@ -67,9 +67,25 @@ TEST(TestTypeStorage, set_get_type)
     }
 }
 
+namespace
+{
+    struct base
+    {
+        char m_c = 'b';
+    };
+
+    struct special_a : public base
+    { };
+
+    struct special_b : public base
+    { };
+}
+
 TEST(TestTypeStorage, baget_basetype)
 {
-    std::tuple<std::stringstream, std::string, std::mutex, uint64_t> tup;
+    std::tuple<std::stringstream,
+               std::string, std::vector<char>, std::mutex, uint64_t,
+               special_a, special_b> tup;
 
     // Verify that we can get an object out based on the base type using 
     // the baget function:
@@ -87,4 +103,12 @@ TEST(TestTypeStorage, baget_basetype)
         EXPECT_EQ('b', is.get());
         EXPECT_EQ('c', is.get());
     }
+
+    // We can get the special_a and special_b types from tup using get(),
+    // but baget() will not compile as they share the same base.
+    auto& a = type_storage::get<special_a>(tup); // OK
+    auto& b = type_storage::get<special_b>(tup); // OK
+    // auto& ba = type_storage::baget<base>(tup); // will not compile
+
+    EXPECT_EQ(a.m_c, b.m_c);
 }

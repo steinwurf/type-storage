@@ -20,7 +20,7 @@ namespace type_storage
         struct find_type
         {
             static_assert(i != 0, "Type not found in provided typelist");
-            static_assert(1 >= i , "Type not unique in provided typelist");
+            static_assert(1 >= i , "Ambiguous types in provided typelist");
             static_assert(sizeof...(Ts) == 0, "Internal error: Ts not 0");
         };
 
