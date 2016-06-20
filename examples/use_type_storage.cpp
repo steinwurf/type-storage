@@ -81,8 +81,11 @@ int main()
     // Container with different types, some derived from a base
     std::tuple<std::string, uint32_t, float, char, std::tuple<int>, derived> t;
 
-    // With type-storage::baget we fetch the Base-type object of a derived type
-    // in the tuple. NB: The original object stored in the tuple is a derived
+    // With type-storage::baget we fetch the object of a derived type
+    // in the tuple by using a base type. The derived type object is returned,
+    // and can be stored with the auto parameter if specific type is 'unknown'
+    // in the code.
+    // NB: The original object stored in the tuple is a derived
     // type, e.g. virtual functions in the base may have been overridden.
     base& baze = type_storage::baget<base>(t);
     baze.print(); // calls base::print()
