@@ -16,7 +16,7 @@
 
 TEST(TestTypeStorage, detail)
 {
-    const size_t idx = type_storage::detail::find_index<uint32_t, 
+    const size_t idx = type_storage::detail::find_index<std::is_same, uint32_t, 
         char, uint8_t, uint16_t, uint32_t, uint64_t, std::string, float>::value;
     EXPECT_EQ(3u, idx);
 }

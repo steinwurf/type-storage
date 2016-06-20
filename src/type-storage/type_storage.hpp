@@ -15,7 +15,8 @@ namespace type_storage
     {
 
         /// Helper struct for find_index. "Empty" non specialised struct.
-        template<int i, typename U, bool cond, typename... Ts>
+        template<template<class, class> class P,
+                 int i, typename U, bool cond, typename... Ts>
         struct find_type
         {
             static_assert(i != 0, "Type not found in provided typelist");
@@ -26,9 +27,10 @@ namespace type_storage
         /// Helper struct for find_index, true specialisation.
         /// template member index<>::value finds index based on the size of
         /// remaining parameter pack Ts... when a type match has been found.
-        template<int i, typename U, typename... Ts>
-        struct find_type<i, U, true, Ts...>
-            : find_type<i+1, U, false, Ts...>
+        template<template<class, class> class P,
+                 int i, typename U, typename... Ts>
+        struct find_type<P, i, U, true, Ts...>
+            : find_type<P, i+1, U, false, Ts...>
 
         {
             /// specifies the index of the found type
@@ -44,70 +46,21 @@ namespace type_storage
         /// Check for type match between U and T, and inherits from correct
         /// find_type specialisation. member index<>::value obtained by
         /// recursion (recurses until U == T )
-        template<int i, typename U, typename T, typename... Ts>
-        struct find_type<i, U, false, T, Ts...>
-            : find_type<i, U, std::is_same<U, T>::value, Ts...>
+        template<template<class, class> class P,
+                 int i, typename U, typename T, typename... Ts>
+        struct find_type<P, i, U, false, T, Ts...>
+            : find_type<P, i, U, P<U, T>::value, Ts...>
         { };
 
-
         /// Finds index of type U in template parameter pack Ts using find_type
-        template<typename U, typename... Ts>
+        /// with success predicate P<U, Ts>...
+        template<template<class, class> class P, class U, class... Ts>
         struct find_index
         {
             /// describes the index of U in Ts...
             static const size_t value =
-                find_type<0, U, false, Ts...>::template index <Ts...>::value;
+                find_type<P, 0, U, false, Ts...>::template index <Ts...>::value;
         };
-
-
-
-
-
-
-
-
-        /// Helper struct for find_base_index. "Empty" non specialised struct.
-        template<bool cond, typename... Ts>
-        struct find_base
-        {
-            static_assert(cond, "Base type not found in provided typelist");
-        };
-
-        /// Helper struct for find_base_index, true specialisation.
-        /// template member index<>::value finds index based on the size of
-        /// remaining paramter pack Ts... when a type match has been found.
-        template<typename... Ts>
-        struct find_base<true, Ts...>
-        {
-            /// specifies the index of the found base type
-            template<typename... Types>
-            struct index
-            {
-                /// describes the index of requested type in Ts...
-                static const size_t value = sizeof...(Types) - sizeof...(Ts);
-                // static_assert("Ensure we cannot find one more base type");
-            };
-        };
-
-        /// Helper struct for find_base_index, false specialization.
-        /// Check for type match between U and T, and inherits from correct
-        /// find_type specialisation. member index<>::value obtained by
-        /// recursion (recurses until U == T )
-        template<typename B, typename T, typename... Ts>
-        struct find_base<false, B, T, Ts...>
-            : find_base<std::is_base_of<B, T>::value, B, Ts...>
-        {};
-
-
-        /// Finds index of type U in template parameter pack Ts using find_type
-        template<typename B, typename... Ts>
-        struct find_base_index
-        {
-            /// describes the index of U in Ts...
-            static const size_t value =
-                find_base<false, B, Ts...>::template index <Ts...>::value;
-        };
-
     }
 
     /// Get a object of specific type T from tuple regardless of its position.
@@ -120,14 +73,16 @@ namespace type_storage
     template<typename T, typename... Types>
     T& get(std::tuple<Types...>& tup)
     {
-        return std::get<detail::find_index<T, Types...>::value>(tup);
+        return std::get<detail::find_index<std::is_same, 
+                                           T, Types...>::value>(tup);
     }
 
     // Const version of above
     template<typename T, typename... Types>
     const T& get(const std::tuple<Types...>& tup)
     {
-        return std::get<detail::find_index<T, Types...>::value>(tup);
+        return std::get<detail::find_index<std::is_same,
+                                           T, Types...>::value>(tup);
     }
 
     /// Get a object of Base type B from tuple regardless of its position.
@@ -140,14 +95,18 @@ namespace type_storage
     template<typename B, typename... Types>
     B& baget(std::tuple<Types...>& tup)
     {
-        return std::get<detail::find_base_index<B, Types...>::value>(tup);
+        // return std::get<detail::find_base_index<B, Types...>::value>(tup);
+        return std::get<detail::find_index<std::is_base_of,
+                                           B, Types...>::value>(tup);
     }
 
     // Const version of above
     template<typename B, typename... Types>
     const B& baget(const std::tuple<Types...>& tup)
     {
-        return std::get<detail::find_base_index<B, Types...>::value>(tup);
+        // return std::get<detail::find_base_index<B, Types...>::value>(tup);
+        return std::get<detail::find_index<std::is_base_of,
+                                           Types...>::value>(tup);
     }
 }
 
