@@ -9,16 +9,26 @@
 
 #include <limits>
 #include <memory>
+#include <mutex>
+#include <string>
 
 #include <gtest/gtest.h>
 
+TEST(TestTypeStorage, detail)
+{
+    const size_t idx = type_storage::detail::find_index<uint32_t, 
+        char, uint8_t, uint16_t, uint32_t, uint64_t, std::string, float>::value;
+    EXPECT_EQ(3u, idx);
+}
+
 TEST(TestTypeStorage, get_type)
 {
-    std::tuple<uint8_t, uint16_t, uint32_t, uint64_t> tup;
+    std::tuple<uint8_t, uint32_t, uint16_t, uint32_t, uint64_t> tup;
 
     // Verify that we get the right size out by using sizeof function
     EXPECT_EQ(1U, sizeof(type_storage::get<uint8_t>(tup)));
     EXPECT_EQ(2U, sizeof(type_storage::get<uint16_t>(tup)));
+
     EXPECT_EQ(4U, sizeof(type_storage::get<uint32_t>(tup)));
     EXPECT_EQ(8U, sizeof(type_storage::get<uint64_t>(tup)));
 }
@@ -54,3 +64,14 @@ TEST(TestTypeStorage, set_get_type)
         EXPECT_EQ(value, type_storage::get<uint64_t>(tup));
     }
 }
+
+// TEST(TestTypeStorage, baget_basetype)
+// {
+//     std::tuple<std::cout, std::string, std::mutex, uint64_t> tup;
+
+//     // Verify that we get the right size out by using sizeof function
+//     EXPECT_EQ(1U, sizeof(type_storage::get<uint8_t>(tup)));
+//     EXPECT_EQ(2U, sizeof(type_storage::get<uint16_t>(tup)));
+//     EXPECT_EQ(4U, sizeof(type_storage::get<uint32_t>(tup)));
+//     EXPECT_EQ(8U, sizeof(type_storage::get<uint64_t>(tup)));
+// }

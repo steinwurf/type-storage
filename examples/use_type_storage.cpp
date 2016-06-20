@@ -1,4 +1,4 @@
-// Copyright (c) 2014 Steinwurf ApS
+// Copyright (c) 2016 Steinwurf ApS
 // All Rights Reserved
 //
 // THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF STEINWURF
@@ -51,9 +51,6 @@ struct derived : public base
 	}
 };
 
-
-
-
 int main()
 {
 	// Create variables of different types to add with function 'add'
@@ -69,13 +66,15 @@ int main()
 	add(c);
 	add(c);
 
+	int32_t tmp = type_storage::get<int32_t>(sums);
+	
 	// The sums can now be tracked using a type, and thus only using one
 	// variable (sums) to keep track of an arbitrary amount of sums.
 	std::cout << "sums are: \n"
-						<< "int32_t:  \t" << type_storage::get<int32_t>(sums) << "\n"
-						<< "uint32_t:  \t" << type_storage::get<uint32_t>(sums) << "\n"
-						<< "float:  \t" << type_storage::get<float>(sums)
-						<< std::endl;
+              << "int32_t:  \t" << tmp << "\n"
+    		  << "uint32_t:  \t" << type_storage::get<uint32_t>(sums) << "\n"
+    		  << "float:  \t" << type_storage::get<float>(sums)
+              << std::endl;
 
 	//--- typestorage::baget<B>() example
 

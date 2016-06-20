@@ -6,30 +6,37 @@
 #pragma once
 
 #include <tuple>
+#include <type_traits>
+#include <utility>
 
 namespace type_storage
 {
     namespace detail
     {
+
         /// Helper struct for find_index. "Empty" non specialised struct.
-        template<bool cond, typename... Ts>
+        template<int i, typename U, bool cond, typename... Ts>
         struct find_type
         {
-            static_assert(cond, "Type not found in provided typelist");
+            static_assert(i != 0, "Type not found in provided typelist");
+            static_assert(1 >= i , "Type not unique in provided typelist");
+            static_assert(sizeof...(Ts) == 0, "Ts not 0");
         };
 
         /// Helper struct for find_index, true specialisation.
         /// template member index<>::value finds index based on the size of
-        /// remaining paramter pack Ts... when a type match has been found.
-        template<typename... Ts>
-        struct find_type<true, Ts...>
+        /// remaining parameter pack Ts... when a type match has been found.
+        template<int i, typename U, typename... Ts>
+        struct find_type<i, U, true, Ts...>
+            : find_type<i+1, U, false, Ts...>
+
         {
             /// specifies the index of the found type
             template<typename... Types>
             struct index
             {
                 /// describes the index of requested type in Ts...
-                static const size_t value = sizeof...(Types) - sizeof...(Ts);
+                static const size_t value = sizeof...(Types) - sizeof...(Ts) -1;
             };
         };
 
@@ -37,10 +44,10 @@ namespace type_storage
         /// Check for type match between U and T, and inherits from correct
         /// find_type specialisation. member index<>::value obtained by
         /// recursion (recurses until U == T )
-        template<typename U, typename T, typename... Ts>
-        struct find_type<false, U, T, Ts...>
-            : find_type<std::is_same<U, T>::value, U, Ts...>
-        {};
+        template<int i, typename U, typename T, typename... Ts>
+        struct find_type<i, U, false, T, Ts...>
+            : find_type<i, U, std::is_same<U, T>::value, Ts...>
+        { };
 
 
         /// Finds index of type U in template parameter pack Ts using find_type
@@ -49,8 +56,14 @@ namespace type_storage
         {
             /// describes the index of U in Ts...
             static const size_t value =
-                find_type<false, U, Ts...>::template index <Ts...>::value;
+                find_type<0, U, false, Ts...>::template index <Ts...>::value;
         };
+
+
+
+
+
+
 
 
         /// Helper struct for find_base_index. "Empty" non specialised struct.
@@ -72,6 +85,7 @@ namespace type_storage
             {
                 /// describes the index of requested type in Ts...
                 static const size_t value = sizeof...(Types) - sizeof...(Ts);
+                // static_assert("Ensure we cannot find one more base type");
             };
         };
 
