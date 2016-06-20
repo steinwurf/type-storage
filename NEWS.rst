@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+2.1.0
+-----
 * Added baget function to get an object based on a specified base type.
 
 2.0.2
