@@ -82,7 +82,7 @@ namespace type_storage
 
     // Const version of above
     template<typename T, typename... Types>
-    const auto get(const std::tuple<Types...>& tup)
+    auto get(const std::tuple<Types...>& tup)
         -> decltype(std::get<detail::find_index<std::is_same,
                                                 T, Types...>::value>(tup))
     {
@@ -111,7 +111,7 @@ namespace type_storage
 
     // Const version of above
     template<typename B, typename... Types>
-    const auto baget(const std::tuple<Types...>& tup)
+    auto baget(const std::tuple<Types...>& tup)
         -> decltype(std::get<detail::find_index<std::is_base_of,
                                                 B, Types...>::value>(tup))
     {
