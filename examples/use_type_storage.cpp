@@ -67,7 +67,7 @@ int main()
 	add(c);
 
 	int32_t tmp = type_storage::get<int32_t>(sums);
-	
+
 	// The sums can now be tracked using a type, and thus only using one
 	// variable (sums) to keep track of an arbitrary amount of sums.
 	std::cout << "sums are: \n"
@@ -87,4 +87,9 @@ int main()
     base& baze = type_storage::baget<base>(t);
     baze.print(); // calls base::print()
     baze.vprint(); // calls derived::vprint()
+
+	auto& spezial = type_storage::baget<base>(t);
+    spezial.print(); // calls derived::print()
+    spezial.vprint(); // calls derived::vprint()
+
 }

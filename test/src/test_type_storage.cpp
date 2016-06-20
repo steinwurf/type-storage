@@ -25,7 +25,7 @@ TEST(TestTypeStorage, detail)
 
 TEST(TestTypeStorage, get_type)
 {
-    std::tuple<uint8_t, uint32_t, uint16_t, uint32_t, uint64_t> tup;
+    std::tuple<uint8_t, uint32_t, uint16_t, uint64_t> tup;
 
     // Verify that we get the right size out by using sizeof function
     EXPECT_EQ(1U, sizeof(type_storage::get<uint8_t>(tup)));

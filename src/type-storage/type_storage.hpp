@@ -66,12 +66,15 @@ namespace type_storage
     /// Get a object of specific type T from tuple regardless of its position.
     /// This function is basically a simple implementation of 
     /// C++14 std::get<T>(std::tuple<Types>&) function, using C++11 code.
-    /// NB: If tuple contains more than one object of the specific type,
-    /// a reference to the first found object with type T is returned.
+    /// NB: If tuple contains more than one object of the reqeusted type T,
+    /// the code cannot compile. Multiple objects of type different from T may
+    /// exist in the tuple.
     /// If type T is not contained in tuple the code cannot compile.
     /// @param tup the tuple of objects to look in
     template<typename T, typename... Types>
-    T& get(std::tuple<Types...>& tup)
+    auto get(std::tuple<Types...>& tup)
+        -> decltype(std::get<detail::find_index<std::is_same, 
+                                                T, Types...>::value>(tup))
     {
         return std::get<detail::find_index<std::is_same, 
                                            T, Types...>::value>(tup);
@@ -79,32 +82,39 @@ namespace type_storage
 
     // Const version of above
     template<typename T, typename... Types>
-    const T& get(const std::tuple<Types...>& tup)
+    const auto get(const std::tuple<Types...>& tup)
+        -> decltype(std::get<detail::find_index<std::is_same,
+                                                T, Types...>::value>(tup))
     {
         return std::get<detail::find_index<std::is_same,
                                            T, Types...>::value>(tup);
     }
 
-    /// Get a object of Base type B from tuple regardless of its position.
+    /// Get an object from base type B from tuple regardless of its position.
     /// This function is virtually identical to get(), however the matching
     /// condition is on base types, not exact types.
     /// NB: If tuple contains more than one object of a matching base type,
-    /// a reference to the first found object with base type B is returned.
-    /// If base type B is not contained in tuple the code cannot compile.
+    /// the code will not compile (static assertion). The same is valid if the
+    /// tuple does not contain any types with matching base.
+    /// Only the base type requested may cause a compile error, all other 
+    /// types may be identical or share the same base, as long as they are 
+    /// different from type B.
     /// @param tup the tuple of objects to look in
     template<typename B, typename... Types>
-    B& baget(std::tuple<Types...>& tup)
+    auto baget(std::tuple<Types...>& tup)
+        -> decltype(std::get<detail::find_index<std::is_base_of,
+                                                B, Types...>::value>(tup))
     {
-        // return std::get<detail::find_base_index<B, Types...>::value>(tup);
         return std::get<detail::find_index<std::is_base_of,
                                            B, Types...>::value>(tup);
     }
 
     // Const version of above
     template<typename B, typename... Types>
-    const B& baget(const std::tuple<Types...>& tup)
+    const auto baget(const std::tuple<Types...>& tup)
+        -> decltype(std::get<detail::find_index<std::is_base_of,
+                                                B, Types...>::value>(tup))
     {
-        // return std::get<detail::find_base_index<B, Types...>::value>(tup);
         return std::get<detail::find_index<std::is_base_of,
                                            Types...>::value>(tup);
     }
