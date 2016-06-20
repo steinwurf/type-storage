@@ -11,6 +11,8 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <sstream>
+#include <iostream>
 
 #include <gtest/gtest.h>
 
@@ -65,13 +67,24 @@ TEST(TestTypeStorage, set_get_type)
     }
 }
 
-// TEST(TestTypeStorage, baget_basetype)
-// {
-//     std::tuple<std::cout, std::string, std::mutex, uint64_t> tup;
+TEST(TestTypeStorage, baget_basetype)
+{
+    std::tuple<std::stringstream, std::string, std::mutex, uint64_t> tup;
 
-//     // Verify that we get the right size out by using sizeof function
-//     EXPECT_EQ(1U, sizeof(type_storage::get<uint8_t>(tup)));
-//     EXPECT_EQ(2U, sizeof(type_storage::get<uint16_t>(tup)));
-//     EXPECT_EQ(4U, sizeof(type_storage::get<uint32_t>(tup)));
-//     EXPECT_EQ(8U, sizeof(type_storage::get<uint64_t>(tup)));
-// }
+    // Verify that we can get an object out based on the base type using 
+    // the baget function:
+    // Here we get the stringstream object using the istream base
+    {
+        auto& os = type_storage::baget<std::ostream>(tup);
+        os.put('a');
+        os.put('b');
+        os.put('c');
+    }
+    // Then we fetch the same object out again, using the istream base
+    {
+        auto& is = type_storage::baget<std::istream>(tup);
+        EXPECT_EQ('a', is.get());
+        EXPECT_EQ('b', is.get());
+        EXPECT_EQ('c', is.get());
+    }
+}
