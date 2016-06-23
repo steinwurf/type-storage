@@ -64,7 +64,7 @@ namespace type_storage
 
 
         /// Below helper structs are implementations of c++14 functionality with
-        /// same name, can be discarded for c++14
+        /// same name, can be discarded for c++14.
 
         /// Remove constness from type T
         template<class T>
