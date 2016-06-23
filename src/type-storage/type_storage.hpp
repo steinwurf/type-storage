@@ -61,7 +61,54 @@ namespace type_storage
             static const size_t value =
                 find_type<P, 0, U, false, Ts...>::template index <Ts...>::value;
         };
+
+
+        /// Below helper structs are implementations of c++14 functionality with
+        /// same name, can be discarded for c++14
+
+        /// Remove constness from type T
+        template<class T>
+        struct remove_const
+        {
+            using type = T;
+        };
+
+        /// Remove constness from type T, specialized for const types
+        template<class T>
+        struct remove_const<const T>
+        {
+            using type = T;
+        };
+
+        /// Remove volatile from type T
+        template<class T>
+        struct remove_volatile
+        {
+            using type = T;
+        };
+
+        /// Remove volatile from type T, specialized for volatile types
+        template<class T>
+        struct remove_volatile<volatile T>
+        {
+            using type = T;
+        };
+
+        /// Remove constness and volatile from types
+        template<class T>
+        struct remove_cv
+        {
+            using type = typename remove_volatile<
+                             typename remove_const<T>::type>::type;
+        };
+
     }
+
+    // is_base_of TMP comparison struct ignoring constness of types
+    template<class T, class U>
+    struct is_same : std::is_same<typename detail::remove_cv<T>::type,
+                                  typename detail::remove_cv<U>::type>
+    { };
 
     /// Get a object of specific type T from tuple regardless of its position.
     /// This function is basically a simple implementation of 
@@ -73,22 +120,29 @@ namespace type_storage
     /// @param tup the tuple of objects to look in
     template<typename T, typename... Types>
     auto get(std::tuple<Types...>& tup)
-        -> decltype(std::get<detail::find_index<std::is_same, 
+        -> decltype(std::get<detail::find_index<is_same, 
                                                 T, Types...>::value>(tup))
     {
-        return std::get<detail::find_index<std::is_same, 
+        return std::get<detail::find_index<is_same, 
                                            T, Types...>::value>(tup);
     }
 
     // Const version of above
     template<typename T, typename... Types>
     auto get(const std::tuple<Types...>& tup)
-        -> decltype(std::get<detail::find_index<std::is_same,
+        -> decltype(std::get<detail::find_index<is_same,
                                                 T, Types...>::value>(tup))
     {
-        return std::get<detail::find_index<std::is_same,
+        return std::get<detail::find_index<is_same,
                                            T, Types...>::value>(tup);
     }
+
+    // is_base_of TMP comparison struct ignoring constness of types
+    template<class T, class U>
+    struct is_base_of : std::is_base_of<typename detail::remove_cv<T>::type,
+                                        typename detail::remove_cv<U>::type>
+    { };
+
 
     /// Get an object from base type B from tuple regardless of its position.
     /// This function is virtually identical to get(), however the matching
@@ -102,21 +156,21 @@ namespace type_storage
     /// @param tup the tuple of objects to look in
     template<typename B, typename... Types>
     auto baget(std::tuple<Types...>& tup)
-        -> decltype(std::get<detail::find_index<std::is_base_of,
+        -> decltype(std::get<detail::find_index<is_base_of,
                                                 B, Types...>::value>(tup))
     {
-        return std::get<detail::find_index<std::is_base_of,
+        return std::get<detail::find_index<is_base_of,
                                            B, Types...>::value>(tup);
     }
 
     // Const version of above
     template<typename B, typename... Types>
     auto baget(const std::tuple<Types...>& tup)
-        -> decltype(std::get<detail::find_index<std::is_base_of,
+        -> decltype(std::get<detail::find_index<is_base_of,
                                                 B, Types...>::value>(tup))
     {
-        return std::get<detail::find_index<std::is_base_of,
-                                           Types...>::value>(tup);
+        return std::get<detail::find_index<is_base_of,
+                                           B, Types...>::value>(tup);
     }
 }
 

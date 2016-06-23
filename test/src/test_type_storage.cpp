@@ -75,10 +75,20 @@ namespace
     };
 
     struct special_a : public base
-    { };
+    {
+        void print() const
+        {
+            std::cout << "special a print" << std::endl;
+        }
+    };
 
     struct special_b : public base
-    { };
+    {
+        void print() const
+        {
+            std::cout << "special b print" << std::endl;
+        }
+    };
 }
 
 TEST(TestTypeStorage, baget_basetype)
@@ -111,4 +121,24 @@ TEST(TestTypeStorage, baget_basetype)
     // auto& ba = type_storage::baget<base>(tup); // will not compile
 
     EXPECT_EQ(a.m_c, b.m_c);
+}
+
+TEST(TestTypeStorage, get_baget_const)
+{
+    const std::tuple<std::stringstream,
+               std::string, std::vector<char>, std::mutex, uint64_t,
+               special_a> tup;
+
+    const auto& ba = type_storage::baget<base>(tup);
+    (void) ba;
+
+    const auto& sa = type_storage::get<special_a>(tup);
+    (void) sa;
+
+    // Ignores const statement when searching
+    const auto& bac = type_storage::baget<const base>(tup);
+    (void) bac;
+
+    const auto& sac = type_storage::get<const special_a>(tup);
+    (void) sac;
 }
