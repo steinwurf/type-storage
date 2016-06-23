@@ -173,4 +173,3 @@ namespace type_storage
                                            B, Types...>::value>(tup);
     }
 }
-
