@@ -30,7 +30,7 @@ namespace type_storage
         Wrapper<T>& get()
         {
             return std::get <
-                   detail::find_index<std::is_same,
+                   detail::find_index<is_same,
                                       T, MessageTypes...>::value > (m_tuple);
         }
 
@@ -39,7 +39,7 @@ namespace type_storage
         const Wrapper<T>& get() const
         {
             return std::get <
-                   detail::find_index<std::is_same,
+                   detail::find_index<is_same,
                                       T, MessageTypes...>::value > (m_tuple);
         }
 
