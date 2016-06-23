@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+2.2.0
+-----
 * Minor: Now ignoring ``const`` and ``volatile`` qualifiers on types.
 * Patch: Fixed bug in const version of ``type_storage::baget()``
 
