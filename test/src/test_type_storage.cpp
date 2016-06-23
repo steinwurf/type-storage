@@ -75,20 +75,10 @@ namespace
     };
 
     struct special_a : public base
-    {
-        void print() const
-        {
-            std::cout << "special a print" << std::endl;
-        }
-    };
+    { };
 
     struct special_b : public base
-    {
-        void print() const
-        {
-            std::cout << "special b print" << std::endl;
-        }
-    };
+    { };
 }
 
 TEST(TestTypeStorage, baget_basetype)
