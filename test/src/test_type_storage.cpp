@@ -18,8 +18,9 @@
 
 TEST(TestTypeStorage, detail)
 {
-    const size_t idx = type_storage::detail::find_index<std::is_same, uint32_t, 
-        char, uint8_t, uint16_t, uint32_t, uint64_t, std::string, float>::value;
+    const size_t idx = type_storage::detail::find_index<std::is_same, uint32_t,
+                       char, uint8_t, uint16_t, uint32_t, uint64_t, 
+                       std::string, float>::value;
     EXPECT_EQ(3u, idx);
 }
 
@@ -83,11 +84,12 @@ namespace
 
 TEST(TestTypeStorage, baget_basetype)
 {
-    std::tuple<std::stringstream,
-               std::string, std::vector<char>, std::mutex, uint64_t,
-               special_a, special_b> tup;
+    std::tuple<
+        std::stringstream,
+        std::string, std::vector<char>, std::mutex, uint64_t,
+        special_a, special_b> tup;
 
-    // Verify that we can get an object out based on the base type using 
+    // Verify that we can get an object out based on the base type using
     // the baget function:
     // Here we get the stringstream object using the istream base
     {
@@ -115,9 +117,10 @@ TEST(TestTypeStorage, baget_basetype)
 
 TEST(TestTypeStorage, get_baget_const)
 {
-    const std::tuple<std::stringstream,
-               std::string, std::vector<char>, std::mutex, uint64_t,
-               special_a> tup;
+    const std::tuple<
+        std::stringstream,
+        std::string, std::vector<char>, std::mutex, uint64_t,
+        special_a> tup;
 
     const auto& ba = type_storage::baget<base>(tup);
     (void) ba;

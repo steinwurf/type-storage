@@ -28,7 +28,8 @@ namespace
     class shared_pointer : public std::shared_ptr<T>
     {
     public:
-        shared_pointer() : std::shared_ptr<T>(std::make_shared<T>())
+        shared_pointer() :
+            std::shared_ptr<T>(std::make_shared<T>())
         { }
     };
 }
@@ -37,13 +38,13 @@ namespace
 TEST(TestWrappedTypeStorage, initialize)
 {
     type_storage::wrapped_type_storage<size_wrap,
-                 uint8_t, uint16_t, uint32_t, uint64_t> storage;
+        uint8_t, uint16_t, uint32_t, uint64_t> storage;
 }
 
 TEST(TestWrappedTypeStorage, get_type)
 {
     type_storage::wrapped_type_storage<size_wrap,
-                 uint8_t, uint16_t, uint32_t, uint64_t> storage;
+        uint8_t, uint16_t, uint32_t, uint64_t> storage;
 
     EXPECT_EQ(1U, storage.get<uint8_t>().size);
     EXPECT_EQ(2U, storage.get<uint16_t>().size);
@@ -58,7 +59,7 @@ TEST(TestWrappedTypeStorage, get_type)
 TEST(TestWrappedTypeStorage, unrelated_type_lookup)
 {
     type_storage::wrapped_type_storage<type_counter,
-                 uint8_t, uint16_t, uint32_t, uint64_t> counters;
+        uint8_t, uint16_t, uint32_t, uint64_t> counters;
 
     // object 'counters' is basically a list of uint32_t's that can be fetched
     // based on the associated type:
@@ -83,13 +84,13 @@ TEST(TestWrappedTypeStorage, unrelated_type_lookup)
 
     /// Verify that the type return by get is int32_t:
     EXPECT_TRUE(bool(std::is_same<decltype(counters.get<uint8_t>()),
-                int32_t&>::value));
+                     int32_t&>::value));
     EXPECT_TRUE(bool(std::is_same<decltype(counters.get<uint16_t>()),
-                int32_t&>::value));
+                     int32_t&>::value));
     EXPECT_TRUE(bool(std::is_same<decltype(counters.get<uint32_t>()),
-                int32_t&>::value));
+                     int32_t&>::value));
     EXPECT_TRUE(bool(std::is_same<decltype(counters.get<uint64_t>()),
-                int32_t&>::value));
+                     int32_t&>::value));
 }
 
 /// Some wrapper types does not provide sufficient default construction,
@@ -99,7 +100,7 @@ TEST(TestWrappedTypeStorage, unrelated_type_lookup)
 TEST(TestWrappedTypeStorage, add_default_construct)
 {
     type_storage::wrapped_type_storage<shared_pointer,
-                 uint8_t, uint16_t, uint32_t> storage;
+        uint8_t, uint16_t, uint32_t> storage;
 
     EXPECT_TRUE(bool(storage.get<uint8_t>()));
 

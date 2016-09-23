@@ -20,7 +20,7 @@ namespace type_storage
         struct find_type
         {
             static_assert(i != 0, "Type not found in provided typelist");
-            static_assert(1 >= i , "Ambiguous types in provided typelist");
+            static_assert(1 >= i, "Ambiguous types in provided typelist");
             static_assert(sizeof...(Ts) == 0, "Internal error: Ts not 0");
         };
 
@@ -97,14 +97,14 @@ namespace type_storage
         struct remove_cv
         {
             using type = typename remove_volatile<
-                             typename remove_const<T>::type>::type;
+                         typename remove_const<T>::type>::type;
         };
     }
 
     // is_base_of TMP comparison struct ignoring constness of types
     template<class T, class U>
     struct is_same : std::is_same<typename detail::remove_cv<T>::type,
-                                  typename detail::remove_cv<U>::type>
+        typename detail::remove_cv<U>::type>
     { };
 
     /// Get a object of specific type T from tuple regardless of its position.
@@ -133,7 +133,7 @@ namespace type_storage
     // is_base_of TMP comparison struct ignoring constness of types
     template<class T, class U>
     struct is_base_of : std::is_base_of<typename detail::remove_cv<T>::type,
-                                        typename detail::remove_cv<U>::type>
+        typename detail::remove_cv<U>::type>
     { };
 
     /// Get an object from base type B from tuple regardless of its position.
@@ -149,19 +149,19 @@ namespace type_storage
     template<typename B, typename... Types>
     auto baget(std::tuple<Types...>& tup) ->
         decltype(std::get<detail::find_index<
-            is_base_of, B, Types...>::value>(tup))
+                 is_base_of, B, Types...>::value>(tup))
     {
         return std::get<detail::find_index<
-            is_base_of, B, Types...>::value>(tup);
+               is_base_of, B, Types...>::value>(tup);
     }
 
     // Const version of above
     template<typename B, typename... Types>
     auto baget(const std::tuple<Types...>& tup) ->
         decltype(std::get<detail::find_index<
-            is_base_of, B, Types...>::value>(tup))
+                 is_base_of, B, Types...>::value>(tup))
     {
         return std::get<detail::find_index<
-            is_base_of, B, Types...>::value>(tup);
+               is_base_of, B, Types...>::value>(tup);
     }
 }

@@ -31,7 +31,7 @@ namespace type_storage
         {
             return std::get <
                    detail::find_index<is_same,
-                                      T, MessageTypes...>::value > (m_tuple);
+                   T, MessageTypes...>::value > (m_tuple);
         }
 
         // const version
@@ -40,7 +40,7 @@ namespace type_storage
         {
             return std::get <
                    detail::find_index<is_same,
-                                      T, MessageTypes...>::value > (m_tuple);
+                   T, MessageTypes...>::value > (m_tuple);
         }
 
 
