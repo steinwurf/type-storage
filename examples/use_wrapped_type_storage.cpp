@@ -19,7 +19,7 @@ template<typename T>
 using type_wrapper = std::vector<T>;
 
 type_storage::wrapped_type_storage<type_wrapper,
-             bool, int32_t, uint32_t, float> log_storage;
+    bool, int32_t, uint32_t, float> log_storage;
 
 std::mt19937 engine(0);
 std::bernoulli_distribution randbool(0.5);
