@@ -12,41 +12,41 @@
 namespace type_storage
 {
 
-    /// Container for multiple unique types
-    /// All types are packed in template class Wrapper, so it is possible to
-    /// have e.g. vectors of types MessageTypes, or even vectors of vectors
-    /// of MessagesTypes.
-    /// Wrapper<Type>-references can be extracted with the
-    /// get<Type>() member function.
-    template<template <typename> class Wrapper, typename... MessageTypes>
-    class wrapped_type_storage
+/// Container for multiple unique types
+/// All types are packed in template class Wrapper, so it is possible to
+/// have e.g. vectors of types MessageTypes, or even vectors of vectors
+/// of MessagesTypes.
+/// Wrapper<Type>-references can be extracted with the
+/// get<Type>() member function.
+template<template <typename> class Wrapper, typename... MessageTypes>
+class wrapped_type_storage
+{
+public:
+
+    /// Finds the variable type Wrapper<T> in private member m_tuple.
+    /// Does not compile if T is not in m_tuple.
+    /// @return a reference to the requested variable, Wrapper<T>&
+    template<typename T>
+    Wrapper<T>& get()
     {
-    public:
+        return std::get <
+               detail::find_index<is_same,
+               T, MessageTypes...>::value > (m_tuple);
+    }
 
-        /// Finds the variable type Wrapper<T> in private member m_tuple.
-        /// Does not compile if T is not in m_tuple.
-        /// @return a reference to the requested variable, Wrapper<T>&
-        template<typename T>
-        Wrapper<T>& get()
-        {
-            return std::get <
-                   detail::find_index<is_same,
-                   T, MessageTypes...>::value > (m_tuple);
-        }
-
-        // const version
-        template<typename T>
-        const Wrapper<T>& get() const
-        {
-            return std::get <
-                   detail::find_index<is_same,
-                   T, MessageTypes...>::value > (m_tuple);
-        }
+    // const version
+    template<typename T>
+    const Wrapper<T>& get() const
+    {
+        return std::get <
+               detail::find_index<is_same,
+               T, MessageTypes...>::value > (m_tuple);
+    }
 
 
-    private:
+private:
 
-        /// the native container
-        std::tuple<Wrapper<MessageTypes>...> m_tuple;
-    };
+    /// the native container
+    std::tuple<Wrapper<MessageTypes>...> m_tuple;
+};
 }

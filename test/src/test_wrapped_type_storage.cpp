@@ -14,24 +14,24 @@
 
 namespace
 {
-    template<typename T> struct size_wrap
-    {
-        T value;
-        const size_t size = sizeof(T);
-    };
+template<typename T> struct size_wrap
+{
+    T value;
+    const size_t size = sizeof(T);
+};
 
-    template<typename T>
-    using type_counter = int32_t;
+template<typename T>
+using type_counter = int32_t;
 
-    // Add default constructor to a "wrapper type"
-    template<typename T>
-    class shared_pointer : public std::shared_ptr<T>
-    {
-    public:
-        shared_pointer() :
-            std::shared_ptr<T>(std::make_shared<T>())
-        { }
-    };
+// Add default constructor to a "wrapper type"
+template<typename T>
+class shared_pointer : public std::shared_ptr<T>
+{
+public:
+    shared_pointer() :
+        std::shared_ptr<T>(std::make_shared<T>())
+    { }
+};
 }
 
 

@@ -19,7 +19,7 @@
 TEST(TestTypeStorage, detail)
 {
     const size_t idx = type_storage::detail::find_index<std::is_same, uint32_t,
-                       char, uint8_t, uint16_t, uint32_t, uint64_t, 
+                       char, uint8_t, uint16_t, uint32_t, uint64_t,
                        std::string, float>::value;
     EXPECT_EQ(3u, idx);
 }
@@ -70,16 +70,16 @@ TEST(TestTypeStorage, set_get_type)
 
 namespace
 {
-    struct base
-    {
-        char m_c = 'b';
-    };
+struct base
+{
+    char m_c = 'b';
+};
 
-    struct special_a : public base
-    { };
+struct special_a : public base
+{ };
 
-    struct special_b : public base
-    { };
+struct special_b : public base
+{ };
 }
 
 TEST(TestTypeStorage, baget_basetype)
